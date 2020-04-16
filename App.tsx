@@ -1,19 +1,26 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import SplashScene from './src/scenes/Splash';
+import LoginScene from './src/scenes/Login';
+import withFunimation from './src/funimation/context';
 
-export default function App() {
+export type RootStackParamList = {
+  Splash: undefined;
+  Login: undefined;
+};
+
+const Stack = createStackNavigator<RootStackParamList>();
+
+const App = () => {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Splash">
+        <Stack.Screen name="Splash" component={SplashScene} options={{headerShown: false}} />
+        <Stack.Screen name="Login" component={LoginScene} options={{title: 'Login with Funimation'}} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default withFunimation()(App);
