@@ -1,14 +1,15 @@
 {
   "expo": {
-    "name": "shinomiya",
+    "name": "Shinomiya",
     "slug": "shinomiya",
     "platforms": [
       "ios",
       "android"
     ],
     "version": "1.0.0",
-    "orientation": "portrait",
     "icon": "./assets/icon.png",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",

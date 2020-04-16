@@ -6,7 +6,8 @@ export interface FunimationOptions {
   territory: Territory;
   token: string | undefined;
 }
-export interface FuniLoginResponse {
+export interface LoginResponse {
+  success: true;
   token: string;
   rlildup_cookie: string;
   user: {
@@ -22,4 +23,8 @@ export interface FuniLoginResponse {
     date_joined: string;
   };
   user_region: Territory;
+}
+export interface ErrorResponse {
+  success: false;
+  error: string;
 }
