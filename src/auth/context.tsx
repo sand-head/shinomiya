@@ -2,9 +2,9 @@ import React, { createContext, useContext } from 'react';
 import { AsyncStorage } from 'react-native';
 
 interface AuthContextValue {
-  signIn: (token: string) => void;
-  signOut: () => void;
-  token?: string;
+  signIn: (token: string) => Promise<void>;
+  signOut: () => Promise<void>;
+  state: AuthState;
 }
 interface AuthState {
   isLoading: boolean;
@@ -68,11 +68,15 @@ const withAuth = (Component: React.ComponentType) => {
     }, []);
 
     const authContext = React.useMemo<AuthContextValue>(() => ({
-      signIn: (token: string) => {
+      signIn: async (token: string) => {
+        await AsyncStorage.setItem('funimation-token', token);
         dispatch({ type: AuthActionType.SIGN_IN, token });
       },
-      signOut: () => dispatch({ type: AuthActionType.SIGN_OUT }),
-      token: state.userToken
+      signOut: async () => {
+        await AsyncStorage.removeItem('funimation-token');
+        dispatch({ type: AuthActionType.SIGN_OUT })
+      },
+      state
     }), [state]);
 
     return (

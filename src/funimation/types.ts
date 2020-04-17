@@ -18,6 +18,11 @@ export interface FunimationUser {
   last_login: string;
   date_joined: string;
 }
+export interface Show {
+  id: number;
+  title: string;
+}
+
 export interface LoginResponse {
   success: true;
   token: string;

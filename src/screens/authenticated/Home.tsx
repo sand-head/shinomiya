@@ -1,7 +1,9 @@
-import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
-import { useFunimation } from '../../funimation/context';
+import React, { useState } from 'react';
+import { StyleSheet, View, Text, Button } from 'react-native';
 import { useColorScheme } from 'react-native-appearance';
+import { useFunimation } from '../../funimation/context';
+import { FunimationUser, Show } from '../../funimation/types';
+import { useAuth } from '../../auth/context';
 
 const styles = StyleSheet.create({
   container: {
@@ -31,17 +33,34 @@ const styles = StyleSheet.create({
 });
 
 const HomeScreen = () => {
+  const [user, setUser] = useState<FunimationUser>({} as FunimationUser);
+  const [shows, setShows] = useState<Show[]>([]);
   const colorScheme = useColorScheme();
   const client = useFunimation();
-  const user = client.GetUser();
+  const { signOut } = useAuth();
+
+  const logOut = async () => {
+    await client.LogOutAsync();
+    await signOut();
+  };
+
+  React.useEffect(() => {
+    const bootstrapAsync = async () => {
+      setUser(await client.GetUserAsync());
+      setShows(await client.GetShowsAsync());
+    };
+    bootstrapAsync();
+  }, []);
 
   const backgroundStyle = colorScheme === 'light' ? styles.lightBackground : styles.darkBackground;
   const textStyle = colorScheme === 'light' ? styles.lightText : styles.darkText;
 
   return (
     <View style={[styles.container, backgroundStyle]}>
-      <Text style={textStyle}>Your name is {user.displayName}.</Text>
-      <Text style={textStyle}>You joined Funimation on {user.date_joined}.</Text>
+      {shows.length > 0 && shows.map(show => (
+        <Text style={textStyle} key={show.id}>{show.title}</Text>
+      ))}
+      <Button title="Log out" onPress={logOut} />
     </View>
   );
 };

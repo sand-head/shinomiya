@@ -51,8 +51,7 @@ const LoginScreen: React.FunctionComponent<LoginScreenProps> = ({navigation}) =>
   const onSubmit = async () => {
     const response = await client.LoginAsync(email, password);
     if (response.success) {
-      // setUsername(response.user.displayName);
-      signIn(response.token);
+      await signIn(response.token);
     } else {
       console.log('error', response.error);
     }

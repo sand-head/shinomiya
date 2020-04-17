@@ -6,6 +6,7 @@ import withFunimation from './src/funimation/context';
 import withAuth, { useAuth } from './src/auth/context';
 import LoginScreen from './src/screens/Login';
 import HomeScreen from './src/screens/authenticated/Home';
+import SplashScreen from './src/screens/Splash';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -16,16 +17,19 @@ const Stack = createStackNavigator<RootStackParamList>();
 
 const App = () => {
   const colorScheme = useColorScheme();
-  const { token } = useAuth();
+  const { state } = useAuth();
 
+  if (state.isLoading) {
+    return <SplashScreen />
+  }
   return (
     <AppearanceProvider>
       <NavigationContainer theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack.Navigator>
-          {token != undefined ? (
-            <Stack.Screen name="Home" component={HomeScreen} />
+          {state.userToken != undefined ? (
+            <Stack.Screen name="Home" component={HomeScreen} options={{headerShown: false}} />
           ) : (
-            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="Login" component={LoginScreen} options={{headerShown: false}} />
           )}
         </Stack.Navigator>
       </NavigationContainer>
