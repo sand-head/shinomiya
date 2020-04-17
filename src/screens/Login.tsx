@@ -3,11 +3,13 @@ import { StyleSheet, View, Text, Button } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { useFunimation } from '../funimation/context';
 import { useColorScheme } from 'react-native-appearance';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../../App';
+import { useAuth } from '../auth/context';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -32,12 +34,16 @@ const styles = StyleSheet.create({
   },
 });
 
-const LoginScene = () => {
+interface LoginScreenProps {
+  navigation: StackNavigationProp<RootStackParamList, 'Login'>;
+}
+
+const LoginScreen: React.FunctionComponent<LoginScreenProps> = ({navigation}) => {
   const colorScheme = useColorScheme();
   const client = useFunimation();
+  const { signIn } = useAuth();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [username, setUsername] = useState<string>();
 
   const backgroundStyle = colorScheme === 'light' ? styles.lightBackground : styles.darkBackground;
   const textStyle = colorScheme === 'light' ? styles.lightText : styles.darkText;
@@ -45,7 +51,8 @@ const LoginScene = () => {
   const onSubmit = async () => {
     const response = await client.LoginAsync(email, password);
     if (response.success) {
-      setUsername(response.user.displayName);
+      // setUsername(response.user.displayName);
+      signIn(response.token);
     } else {
       console.log('error', response.error);
     }
@@ -53,6 +60,7 @@ const LoginScene = () => {
 
   return (
     <View style={[styles.container, backgroundStyle]}>
+      <Text style={textStyle}>Shinomiya - the open source Funimation app</Text>
       <TextInput autoCompleteType='username'
         autoCorrect={false}
         keyboardType='email-address'
@@ -72,11 +80,8 @@ const LoginScene = () => {
         style={styles.textInput}
       />
       <Button title='Login!' onPress={onSubmit} />
-      {username && (
-        <Text>Howdy {username}!</Text>
-      )}
     </View>
   );
 };
 
-export default LoginScene;
+export default LoginScreen;

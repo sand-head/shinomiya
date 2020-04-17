@@ -1,14 +1,23 @@
 import { stringify } from 'query-string';
-import { FunimationOptions, LoginResponse, ErrorResponse } from "./types";
+import { FunimationOptions, LoginResponse, ErrorResponse, FunimationUser } from "./types";
 
 interface IFunimationClient {
   LoginAsync(username: string, password: string): Promise<LoginResponse | ErrorResponse>;
 }
 export default class FunimationClient implements IFunimationClient {
   private options: FunimationOptions;
+  private user?: FunimationUser = undefined;
+
   constructor(options: FunimationOptions) {
     this.options = options;
   }
+
+  /**
+   * Retrieves the currently authenticated user.
+   */
+  public GetUser = (): FunimationUser => {
+    return this.user ? this.user : {} as FunimationUser;
+  };
 
   /**
    * Retrieves authentication details of a given Funimation account, or an ErrorResponse.
@@ -31,7 +40,7 @@ export default class FunimationClient implements IFunimationClient {
     }
 
     const body = await response.json() as LoginResponse;
-    if (body.token) this.options.token = body.token;
+    this.user = body.user;
     return { ...body, success: true };
   }
 }
