@@ -21,7 +21,10 @@ export interface FunimationUser {
 export interface Show {
   id: number;
   title: string;
-  thumbnails?: {};
+  thumbnail: ShowThumbnail;
+}
+export interface ShowThumbnail {
+  url: string;
 }
 export type ShowDetails = Show & {
   description: string;

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { StyleSheet, Button } from 'react-native';
+import { StyleSheet, Button, View } from 'react-native';
 import { useColorScheme } from 'react-native-appearance';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import Constants from 'expo-constants';
 import { useFunimation } from '../../funimation/context';
 import { Show } from '../../funimation/types';
 import { useAuth } from '../../auth/context';
@@ -12,6 +12,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: Constants.statusBarHeight
   },
   lightBackground: {
     backgroundColor: '#fff',
@@ -27,8 +28,15 @@ const styles = StyleSheet.create({
   },
 });
 
+interface ShowState {
+  shows: Show[];
+  isLoading: boolean;
+}
 const HomeScreen = ({ navigation }: any) => {
-  const [shows, setShows] = useState<Show[]>([]);
+  const [state, setState] = useState<ShowState>({
+    shows: [],
+    isLoading: true
+  });
   const colorScheme = useColorScheme();
   const client = useFunimation();
   const { signOut } = useAuth();
@@ -41,10 +49,22 @@ const HomeScreen = ({ navigation }: any) => {
   const onShowPress = (id: number, title: string) => {
     navigation.navigate('Details', { id, title });
   };
+  const loadMoreShowsAsync = async () => {
+    console.log('ok loading more show');
+    setState({...state, isLoading: true});
+    const moreShows = await client.GetShowsAsync({offset: state.shows.length});
+    setState({
+      shows: [...state.shows, ...moreShows],
+      isLoading: false
+    });
+  };
 
   React.useEffect(() => {
     const bootstrapAsync = async () => {
-      setShows(await client.GetShowsAsync());
+      setState({
+        shows: await client.GetShowsAsync(),
+        isLoading: false
+      });
     };
     bootstrapAsync();
   }, []);
@@ -52,10 +72,13 @@ const HomeScreen = ({ navigation }: any) => {
   const backgroundStyle = colorScheme === 'light' ? styles.lightBackground : styles.darkBackground;
 
   return (
-    <SafeAreaView style={[styles.container, backgroundStyle]}>
-      <ShowList shows={shows} onShowPress={onShowPress} />
-      <Button title="Log out" onPress={logOut} />
-    </SafeAreaView>
+    <View style={[styles.container, backgroundStyle]}>
+      <ShowList shows={state.shows}
+        onShowPress={onShowPress}
+        isLoading={state.isLoading} // this is probably bad and should be changed
+        onLoadMoreAsync={loadMoreShowsAsync}
+      />
+    </View>
   );
 };
 

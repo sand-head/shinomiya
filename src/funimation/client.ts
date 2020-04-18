@@ -8,7 +8,7 @@ interface ContentOptions {
   sortDirection: SortDirection; // = SortDirection.Descending,
   limit: number; // = 20,
   offset: number; // = 0,
-  q: string; // query
+  q?: string; // query
 }
 enum ContentType {
   Shows = 'shows',
@@ -21,6 +21,13 @@ enum SortBy {
 enum SortDirection {
   Ascending = 'asc',
   Descending = 'desc'
+}
+
+const defaultOptions: ContentOptions = {
+  sortBy: SortBy.Title,
+  sortDirection: SortDirection.Descending,
+  limit: 20,
+  offset: 0
 }
 
 export default class FunimationClient {
@@ -100,7 +107,10 @@ export default class FunimationClient {
     return {
       id,
       title: item.getElementsByTagName('title')[0].firstChild!.nodeValue!,
-      description: itemContent.getElementsByTagName('description')[0].firstChild!.nodeValue!
+      description: itemContent.getElementsByTagName('description')[0].firstChild!.nodeValue!,
+      thumbnail: {
+        url: ''
+      }
     };
   }
 
@@ -111,8 +121,8 @@ export default class FunimationClient {
    * @param limit The total number of items to take.
    * @param offset The number of items to skip.
    */
-  public GetShowsAsync(sortBy: SortBy = SortBy.Title, sortDirection: SortDirection = SortDirection.Descending, limit: number = 20, offset: number = 0): Promise<Show[]> {
-    return this.GetContentAsync(ContentType.Shows, { sortBy, sortDirection, limit, offset });
+  public GetShowsAsync(options?: Partial<ContentOptions>): Promise<Show[]> {
+    return this.GetContentAsync(ContentType.Shows, options);
   }
 
   /**
@@ -141,21 +151,25 @@ export default class FunimationClient {
 
     const body = new DOMParser().parseFromString(await response.text()).documentElement;
     const items = Array.from(body.childNodes).find(c => c.nodeName === 'items')!.childNodes;
-    const shows: Show[] = Array.from(items).filter(c => !c.nodeName.startsWith('#')).map((c, i) => {
+    const shows: Show[] = Array.from(items).filter(c => !c.nodeName.startsWith('#')).map(c => {
       const itemChildren = Array.from((c as Element).childNodes).filter(c => !c.nodeName.startsWith('#'));
       const item = itemChildren.find(child => child.nodeName === 'item')! as Element;
       const pointer = Array.from(item.childNodes).find(c => c.nodeName === 'pointer')! as Element;
-      const id = pointer.getElementsByTagName('params')[0].firstChild!.nodeValue!.split('=')[1]
+      const id = pointer.getElementsByTagName('params')[0].firstChild!.nodeValue!.split('=')[1];
+      const thumbnail = item.getElementsByTagName('thumbnail')[0].firstChild!.nodeValue!;
       return {
         id: Number.parseInt(id),
-        title: item.getElementsByTagName('title')[0].firstChild!.nodeValue!
+        title: item.getElementsByTagName('title')[0].firstChild!.nodeValue!,
+        thumbnail: {
+          url: thumbnail.trim()
+        }
       };
     });
     return shows;
   }
 
-  private async GetContentAsync(id: ContentType, options: Partial<ContentOptions>) {
-    const query = stringify({ ...options, id, territory: this.options.territory });
+  private async GetContentAsync(id: ContentType, options?: Partial<ContentOptions>) {
+    const query = stringify({ ...defaultOptions, ...options, id, territory: this.options.territory });
     const response = await fetch(`${this.options.hostname}/xml/longlist/content/page/?${query}`);
     const body = new DOMParser().parseFromString(await response.text());
     const items = body.documentElement.getElementsByTagName('item');
@@ -163,9 +177,13 @@ export default class FunimationClient {
 
     for (let i = 0; i < items.length; i++) {
       const item = items.item(i)!;
+      const thumbnail = item.getElementsByTagName('thumbnail')[0].firstChild!.nodeValue!;
       shows.push({
         id: Number.parseInt(item.getElementsByTagName('id')[0].firstChild!.nodeValue!),
-        title: item.getElementsByTagName('title')[0].firstChild!.nodeValue!
+        title: item.getElementsByTagName('title')[0].firstChild!.nodeValue!,
+        thumbnail: {
+          url: thumbnail.trim()
+        }
       });
     }
 
