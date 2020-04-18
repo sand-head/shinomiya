@@ -1,9 +1,9 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 
 const SearchScreen = () => {
   return (
-    <View></View>
+    <View><Text>search here pl0x</Text></View>
   );
 };
 

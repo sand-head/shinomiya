@@ -5,11 +5,13 @@ import { AppearanceProvider, useColorScheme } from 'react-native-appearance';
 import withFunimation from './src/funimation/context';
 import withAuth, { useAuth } from './src/auth/context';
 import LoginScreen from './src/screens/Login';
-import HomeScreen from './src/screens/authenticated/Home';
 import SplashScreen from './src/screens/Splash';
+import MainScreen from './src/screens/authenticated/Main';
+import DetailsScreen from './src/screens/authenticated/Details';
 
 export type RootStackParamList = {
-  Home: undefined;
+  Main: undefined;
+  Details: { id: number };
   Login: undefined;
 };
 
@@ -25,13 +27,16 @@ const App = () => {
   return (
     <AppearanceProvider>
       <NavigationContainer theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Stack.Navigator>
-          {state.userToken != undefined ? (
-            <Stack.Screen name="Home" component={HomeScreen} options={{headerShown: false}} />
-          ) : (
-            <Stack.Screen name="Login" component={LoginScreen} options={{headerShown: false}} />
-          )}
-        </Stack.Navigator>
+        {state.userToken != undefined ? (
+          <Stack.Navigator mode="modal">
+            <Stack.Screen name="Main" component={MainScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="Details" component={DetailsScreen} />
+          </Stack.Navigator>
+        ) : (
+          <Stack.Navigator>
+            <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+          </Stack.Navigator>
+        )}
       </NavigationContainer>
     </AppearanceProvider>
   );
