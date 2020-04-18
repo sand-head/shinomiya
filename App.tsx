@@ -7,11 +7,11 @@ import withAuth, { useAuth } from './src/auth/context';
 import LoginScreen from './src/screens/Login';
 import SplashScreen from './src/screens/Splash';
 import MainScreen from './src/screens/authenticated/Main';
-import DetailsScreen from './src/screens/authenticated/Details';
+import DetailsScreen, { DetailsModalProps } from './src/screens/authenticated/Details';
 
 export type RootStackParamList = {
   Main: undefined;
-  Details: { id: number };
+  Details: { id: number, title: string };
   Login: undefined;
 };
 
@@ -30,7 +30,8 @@ const App = () => {
         {state.userToken != undefined ? (
           <Stack.Navigator mode="modal">
             <Stack.Screen name="Main" component={MainScreen} options={{ headerShown: false }} />
-            <Stack.Screen name="Details" component={DetailsScreen} />
+            <Stack.Screen name="Details" component={DetailsScreen}
+              options={({ route }: DetailsModalProps) => ({ title: route.params.title })} />
           </Stack.Navigator>
         ) : (
           <Stack.Navigator>

@@ -5,10 +5,6 @@ import { Show } from '../../funimation/types';
 import { useAuth } from '../../auth/context';
 import { useColorScheme } from 'react-native-appearance';
 
-interface QueueScreenProps {
-
-}
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -43,10 +39,9 @@ const QueueScreen = ({ navigation }: any) => {
   const [queue, setQueue] = useState<Show[]>([]);
 
   const backgroundStyle = colorScheme === 'light' ? styles.lightBackground : styles.darkBackground;
-  const textStyle = colorScheme === 'light' ? styles.lightText : styles.darkText;
 
-  const onButtonPress = (id: number) => {
-    navigation.navigate('Details', { id });
+  const onButtonPress = (id: number, title: string) => {
+    navigation.navigate('Details', { id, title });
   };
 
   React.useEffect(() => {
@@ -59,7 +54,7 @@ const QueueScreen = ({ navigation }: any) => {
   return (
     <View style={[styles.container, backgroundStyle]}>
       {queue.map(show => (
-        <Button title={show.title} onPress={_ => onButtonPress(show.id)} key={show.id} />
+        <Button title={show.title} onPress={_ => onButtonPress(show.id, show.title)} key={show.id} />
       ))}
     </View>
   );

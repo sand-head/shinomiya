@@ -4,7 +4,7 @@ import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../../../App';
 import { useColorScheme } from 'react-native-appearance';
 
-interface DetailsModalProps {
+export interface DetailsModalProps {
   route: RouteProp<RootStackParamList, 'Details'>
 }
 

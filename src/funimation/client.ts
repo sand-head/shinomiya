@@ -114,8 +114,10 @@ export default class FunimationClient {
     const shows: Show[] = Array.from(items).filter(c => !c.nodeName.startsWith('#')).map((c, i) => {
       const itemChildren = Array.from((c as Element).childNodes).filter(c => !c.nodeName.startsWith('#'));
       const item = itemChildren.find(child => child.nodeName === 'item')! as Element;
+      const pointer = Array.from(item.childNodes).find(c => c.nodeName === 'pointer')! as Element;
+      const id = pointer.getElementsByTagName('params')[0].firstChild!.nodeValue!.split('=')[1]
       return {
-        id: i, // todo: figure out how to get the actual id from here
+        id: Number.parseInt(id),
         title: item.getElementsByTagName('title')[0].firstChild!.nodeValue!
       };
     });
