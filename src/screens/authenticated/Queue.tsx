@@ -1,22 +1,17 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Button } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
+import { useColorScheme } from 'react-native-appearance';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFunimation } from '../../funimation/context';
 import { Show } from '../../funimation/types';
 import { useAuth } from '../../auth/context';
-import { useColorScheme } from 'react-native-appearance';
+import ShowList from '../../components/show-list';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  textInput: {
-    height: 24,
-    width: '80%',
-    fontSize: 18,
-    borderBottomColor: '#888',
-    borderBottomWidth: StyleSheet.hairlineWidth
   },
   lightBackground: {
     backgroundColor: '#fff',
@@ -39,6 +34,7 @@ const QueueScreen = ({ navigation }: any) => {
   const [queue, setQueue] = useState<Show[]>([]);
 
   const backgroundStyle = colorScheme === 'light' ? styles.lightBackground : styles.darkBackground;
+  const textStyle = colorScheme === 'light' ? styles.lightText : styles.darkText;
 
   const onButtonPress = (id: number, title: string) => {
     navigation.navigate('Details', { id, title });
@@ -52,11 +48,10 @@ const QueueScreen = ({ navigation }: any) => {
   }, []);
 
   return (
-    <View style={[styles.container, backgroundStyle]}>
-      {queue.map(show => (
-        <Button title={show.title} onPress={_ => onButtonPress(show.id, show.title)} key={show.id} />
-      ))}
-    </View>
+    <SafeAreaView style={[styles.container, backgroundStyle]}>
+      <Text style={textStyle}>My Queue</Text>
+      <ShowList shows={queue} onShowPress={onButtonPress} />
+    </SafeAreaView>
   );
 };
 

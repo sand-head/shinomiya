@@ -1,7 +1,7 @@
 import { stringify } from 'query-string';
 import { AsyncStorage } from 'react-native';
 import { DOMParser } from 'xmldom';
-import { FunimationOptions, LoginResponse, ErrorResponse, FunimationUser, Show } from './types';
+import { FunimationOptions, LoginResponse, ErrorResponse, FunimationUser, Show, ShowDetails } from './types';
 
 interface ContentOptions {
   sortBy: SortBy; // = SortBy.Title,
@@ -72,6 +72,36 @@ export default class FunimationClient {
    */
   public async LogOutAsync(): Promise<void> {
     await AsyncStorage.removeItem('funimation-user');
+  }
+
+  /**
+   * Retrieves the Funimation show that has the given ID. Does not require authentication.
+   * @param id The ID of the show.
+   * @param token An optional Funimation access token, which provides greater detail.
+   */
+  public async GetShowDetailAsync(id: number, token?: string): Promise<ShowDetails> {
+    const query = stringify({
+      territory: this.options.territory,
+      pk: id,
+    });
+    const response = await fetch(`${this.options.hostname}/xml/detail/?${query}`,
+      token == null ? {} : {
+        headers: {
+          'Authorization': `Token ${token}`
+        }
+      });
+    if (!response.ok) throw new Error('the thing did not work');
+    const body = new DOMParser().parseFromString(await response.text()).documentElement;
+    const item = Array.from(
+      Array.from(body.childNodes).find(c => c.nodeName === 'hero')!.childNodes
+    ).find(c => c.nodeName === 'item')! as Element;
+    const itemContent = Array.from(item.childNodes).find(c => c.nodeName === 'content')! as Element;
+    // todo: return a new type with greater detail
+    return {
+      id,
+      title: item.getElementsByTagName('title')[0].firstChild!.nodeValue!,
+      description: itemContent.getElementsByTagName('description')[0].firstChild!.nodeValue!
+    };
   }
 
   /**

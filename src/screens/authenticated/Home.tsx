@@ -1,22 +1,17 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, Button } from 'react-native';
+import { StyleSheet, Button } from 'react-native';
 import { useColorScheme } from 'react-native-appearance';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFunimation } from '../../funimation/context';
-import { FunimationUser, Show } from '../../funimation/types';
+import { Show } from '../../funimation/types';
 import { useAuth } from '../../auth/context';
+import ShowList from '../../components/show-list';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  textInput: {
-    height: 24,
-    width: '80%',
-    fontSize: 18,
-    borderBottomColor: '#888',
-    borderBottomWidth: StyleSheet.hairlineWidth
   },
   lightBackground: {
     backgroundColor: '#fff',
@@ -32,8 +27,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const HomeScreen = () => {
-  const [user, setUser] = useState<FunimationUser>({} as FunimationUser);
+const HomeScreen = ({ navigation }: any) => {
   const [shows, setShows] = useState<Show[]>([]);
   const colorScheme = useColorScheme();
   const client = useFunimation();
@@ -44,24 +38,24 @@ const HomeScreen = () => {
     await signOut();
   };
 
+  const onShowPress = (id: number, title: string) => {
+    navigation.navigate('Details', { id, title });
+  };
+
   React.useEffect(() => {
     const bootstrapAsync = async () => {
-      setUser(await client.GetUserAsync());
       setShows(await client.GetShowsAsync());
     };
     bootstrapAsync();
   }, []);
 
   const backgroundStyle = colorScheme === 'light' ? styles.lightBackground : styles.darkBackground;
-  const textStyle = colorScheme === 'light' ? styles.lightText : styles.darkText;
 
   return (
-    <View style={[styles.container, backgroundStyle]}>
-      {shows.length > 0 && shows.map(show => (
-        <Text style={textStyle} key={show.id}>{show.title}</Text>
-      ))}
+    <SafeAreaView style={[styles.container, backgroundStyle]}>
+      <ShowList shows={shows} onShowPress={onShowPress} />
       <Button title="Log out" onPress={logOut} />
-    </View>
+    </SafeAreaView>
   );
 };
 

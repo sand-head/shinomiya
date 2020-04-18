@@ -21,7 +21,11 @@ export interface FunimationUser {
 export interface Show {
   id: number;
   title: string;
+  thumbnails?: {};
 }
+export type ShowDetails = Show & {
+  description: string;
+};
 
 export interface LoginResponse {
   success: true;
