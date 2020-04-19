@@ -1,8 +1,6 @@
 import React from 'react';
 import { Show } from '../funimation/types';
 import { FlatList } from 'react-native-gesture-handler';
-//@ts-ignore
-import InfiniteScrollView from 'react-native-infinite-scroll-view';
 import ShowItem from './show';
 
 interface ShowListProps {
