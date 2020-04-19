@@ -94,4 +94,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default ShowItem;
+export default React.memo(ShowItem);
