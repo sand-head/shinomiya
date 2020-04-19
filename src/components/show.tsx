@@ -4,31 +4,32 @@ import { StyleSheet, Text, Dimensions, ImageBackground, View } from 'react-nativ
 import { useColorScheme } from 'react-native-appearance';
 import { Show } from '../funimation/types';
 
-const wrap = (text: string, maxLength: number) => {
-  if (text.length <= maxLength) return [text];
+const wrap = (text: string, maxLength: number): string[] => {
+  const words = text.split(' ');
   const lines: string[] = [];
-  const totalLineCount = Math.ceil(text.length / maxLength);
-  let totalLength = 0;
-  for (let i = 0; i < totalLineCount; i++) {
-    if (text[totalLength + maxLength] === ' ') {
-      lines.push(text.substring(totalLength, totalLength + maxLength));
-      totalLength += maxLength + 1;
+  let currentLine: string[] = [], currentLength = 0;
+
+  for (let i = 0; i < words.length; i++) {
+    const word = words[i];
+    // if adding this word causes an overflow, finish this line
+    // currentLine.length takes into account the number of spaces
+    if (currentLength + currentLine.length + word.length >= maxLength) {
+      lines.push(currentLine.join(' '));
+      currentLine = [word];
+      currentLength = word.length;
       continue;
     }
-
-    const partToSearch = text.substring(totalLength, totalLength + maxLength);
-    const lastSpace = partToSearch.lastIndexOf(' ');
-
-    if (i === totalLineCount - 1 || lastSpace === -1) {
-      lines.push(text.substring(totalLength));
-      break;
-    } else {
-      lines.push(text.substring(totalLength, totalLength + lastSpace));
-      totalLength += lastSpace + 1;
-    }
+    currentLine.push(word);
+    currentLength += word.length;
   }
+
+  // if there's still a line unfinished, finish it
+  if (currentLine.length > 0) {
+    lines.push(currentLine.join(' '));
+  }
+
   return lines;
-};
+}
 
 interface ShowProps {
   data: Show;
@@ -55,7 +56,7 @@ const ShowItem: React.FunctionComponent<ShowProps> = ({ data, ...props }) => {
       <ImageBackground style={styles.image} source={{ uri: data.thumbnail.url }}>
         <View style={styles.textWrapper}>
           {wrap(data.title, 18).map((line, i) => (
-            <Text style={textStyles} key={i}>{line}</Text>
+            <Text numberOfLines={1} style={textStyles} key={i}>{line}</Text>
           ))}
         </View>
       </ImageBackground>
