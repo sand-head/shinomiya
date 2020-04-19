@@ -26,8 +26,13 @@ export interface Show {
 export interface ShowThumbnail {
   url: string;
 }
+export interface Episode {
+  title: string;
+  subtitle: string;
+}
 export type ShowDetails = Show & {
   description: string;
+  episodes: Episode[];
 };
 
 export interface LoginResponse {

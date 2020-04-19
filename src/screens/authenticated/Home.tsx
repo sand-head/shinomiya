@@ -50,7 +50,6 @@ const HomeScreen = ({ navigation }: any) => {
     navigation.navigate('Details', { id, title });
   };
   const loadMoreShowsAsync = async () => {
-    console.log('ok loading more show');
     setState({...state, isLoading: true});
     const moreShows = await client.GetShowsAsync({offset: state.shows.length});
     setState({

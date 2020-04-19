@@ -98,19 +98,30 @@ export default class FunimationClient {
         }
       });
     if (!response.ok) throw new Error('the thing did not work');
+
+    // a whole bunch of XML bullshit (I apologize)
     const body = new DOMParser().parseFromString(await response.text()).documentElement;
-    const item = Array.from(
-      Array.from(body.childNodes).find(c => c.nodeName === 'hero')!.childNodes
-    ).find(c => c.nodeName === 'item')! as Element;
+    const bodyChildren = Array.from(body.childNodes);
+    const item = Array.from(bodyChildren.find(c => c.nodeName === 'hero')!.childNodes)
+      .find(c => c.nodeName === 'item')! as Element;
+    const thumbnail = item.getElementsByTagName('thumbnail')[0].firstChild!.nodeValue!;
     const itemContent = Array.from(item.childNodes).find(c => c.nodeName === 'content')! as Element;
-    // todo: return a new type with greater detail
+    const episodeLongList = body.getElementsByTagName('longList')[0] as Element;
+    const episodes = Array.from(episodeLongList.getElementsByTagName('item'));
+
     return {
       id,
       title: item.getElementsByTagName('title')[0].firstChild!.nodeValue!,
       description: itemContent.getElementsByTagName('description')[0].firstChild!.nodeValue!,
       thumbnail: {
-        url: ''
-      }
+        url: thumbnail.trim()
+      },
+      episodes: episodes.map(episode => {
+        return {
+          title: episode.getElementsByTagName('title')[0].firstChild!.nodeValue!,
+          subtitle: episode.getElementsByTagName('subtitle')[0].firstChild!.nodeValue!
+        };
+      })
     };
   }
 

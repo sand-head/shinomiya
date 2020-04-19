@@ -52,9 +52,16 @@ const DetailsScreen = ({ route }: DetailsModalProps) => {
 
   return (
     <View>
-      {showDetails && (
+      {showDetails && (<>
         <Text style={textStyle}>{showDetails.description}</Text>
-      )}
+        <View>
+          {showDetails.episodes.map((episode, i) => {
+            return (
+              <Text style={textStyle} key={i}>{episode.subtitle}: {episode.title}</Text>
+            );
+          })}
+        </View>
+      </>)}
     </View>
   );
 };
