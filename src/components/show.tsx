@@ -54,7 +54,7 @@ const ShowItem: React.FunctionComponent<ShowProps> = ({ data, ...props }) => {
     }]}>
       <ImageBackground style={styles.image} source={{ uri: data.thumbnail.url }}>
         <View style={styles.textWrapper}>
-          {wrap(data.title, 20).map((line, i) => (
+          {wrap(data.title, 18).map((line, i) => (
             <Text style={textStyles} key={i}>{line}</Text>
           ))}
         </View>
