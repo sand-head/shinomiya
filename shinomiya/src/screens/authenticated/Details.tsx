@@ -5,6 +5,7 @@ import { RootStackParamList } from '../../../App';
 import { useColorScheme } from 'react-native-appearance';
 import { useFunimation } from '../../funimation/context';
 import { Show, ShowDetails } from '../../funimation/types';
+import Episodes from '../../components/episodes';
 
 export interface DetailsModalProps {
   route: RouteProp<RootStackParamList, 'Details'>
@@ -54,13 +55,7 @@ const DetailsScreen = ({ route }: DetailsModalProps) => {
     <View>
       {showDetails && (<>
         <Text style={textStyle}>{showDetails.description}</Text>
-        <View>
-          {showDetails.episodes.map((episode, i) => {
-            return (
-              <Text style={textStyle} key={i}>{episode.subtitle}: {episode.title}</Text>
-            );
-          })}
-        </View>
+        <Episodes data={showDetails.episodes} />
       </>)}
     </View>
   );

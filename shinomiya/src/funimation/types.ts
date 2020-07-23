@@ -27,6 +27,7 @@ export interface ShowThumbnail {
   url: string;
 }
 export interface Episode {
+  id: number;
   title: string;
   subtitle: string;
 }

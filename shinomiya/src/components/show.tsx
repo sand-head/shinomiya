@@ -38,7 +38,7 @@ interface ShowProps {
 const ShowItem: React.FunctionComponent<ShowProps> = ({ data, ...props }) => {
   const colorScheme = useColorScheme();
   const { width } = Dimensions.get('window');
-  const itemSize = width / 2 - 8;
+  const itemSize = width / 2;
 
   const textStyles = [styles.text, colorScheme === 'light' ? {
     color: '#000',

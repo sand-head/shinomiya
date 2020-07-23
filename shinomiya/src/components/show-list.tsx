@@ -18,7 +18,6 @@ const ShowList: React.FunctionComponent<ShowListProps> = ({shows, onShowPress, i
         flex: 1,
         justifyContent: 'space-evenly',
         width: '100%',
-        marginVertical: 2
       }}
       keyExtractor={(item) => item.id.toString()}
       refreshing={isLoadingMore}
