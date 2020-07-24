@@ -1,11 +1,12 @@
 import { serve } from 'https://deno.land/std@0.61.0/http/server.ts';
 import RouteTracker, { HttpMethod, isHttpMethod } from './tracker.ts';
 
-const envProxyUrl = Deno.env.get("PROXY_URL") ?? Deno.args.length > 0 ? Deno.args[0] : undefined;
-if (!envProxyUrl) {
+const envProxyUrl = Deno.env.get("PROXY_URL");
+const argProxyUrl = Deno.args.length > 0 ? Deno.args[0] : undefined;
+if (envProxyUrl == undefined && argProxyUrl == undefined) {
   throw Error('PROXY_URL environment variable must be set, or argument must be passed.');
 }
-const proxyUrl = new URL(envProxyUrl);
+const proxyUrl = new URL(envProxyUrl ?? argProxyUrl!);
 
 const maybeEnvPort = Deno.env.get("PORT");
 const port: number = maybeEnvPort ? parseInt(maybeEnvPort) : 5000;
