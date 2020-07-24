@@ -29,14 +29,16 @@ for await (const req of server) {
 
   const decoder = new TextDecoder();
   const body = decoder.decode(await Deno.readAll(req.body));
-  tracker.addOrMerge(req.url, HttpMethod[req.method], body.length > 0 ? body : undefined);
-
   const fullProxyUrl = new URL(req.url, proxyUrl);
   const response = await fetch(fullProxyUrl, {
     headers: req.headers,
     method: req.method,
     body
   });
+  if (response.ok) {
+    // we only want to track the successful requests, for now
+    tracker.addOrMerge(req.url, HttpMethod[req.method], body.length > 0 ? body : undefined);
+  }
   req.respond({
     ...response,
     body: await response.text()

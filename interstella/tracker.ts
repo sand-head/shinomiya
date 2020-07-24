@@ -10,7 +10,7 @@ export enum HttpMethod {
   PATCH = 'PATCH'
 }
 interface Properties {
-  query: {[k: string]: string};
+  query: {[k: string]: string[]};
 }
 
 type Methods = {
@@ -31,28 +31,21 @@ export default class RouteTracker {
     this.routes = {};
   }
 
-  // todo: clean this up, stinky
   addOrMerge(route: string, method: keyof typeof HttpMethod, body?: string) {
     const [path, query] = this.getPathAndQuery(route);
     const currentProps: Properties = {
-      query: (query && this.determineQueryTypes(query)) ?? {}
+      query: (query && this.determineQuery(query)) || {}
     };
 
-    if (!(path in this.routes)) {
-      const methods: Methods = {};
-      methods[method] = currentProps;
-      this.routes[path] = methods;
+    if (path in this.routes && this.routes[path][method] != null) {
+      // merge current and new info
+      this.routes[path][method] = this.mergeProperties(currentProps, this.routes[path][method]!);
       return;
     }
 
-    const methods = this.routes[path];
-    const currentMethod = methods[method];
-    methods[method] = {
-      query: currentMethod != null ? {
-        ...currentMethod.query,
-        ...currentProps.query
-      } : currentProps.query
-    };
+    // no info yet, add
+    const methods: Methods = {};
+    methods[method] = currentProps;
     this.routes[path] = methods;
   }
 
@@ -69,7 +62,22 @@ export default class RouteTracker {
     return [path, query];
   }
 
-  private determineQueryTypes(query: URLSearchParams): {[k: string]: string} {
-    return Object.fromEntries([...query.entries()].map(([key, value]) => [key, typeof value]));
+  private determineQuery(query: URLSearchParams): {[k: string]: string[]} {
+    return Object.fromEntries([...query.entries()].map(([key, value]) => [key, [value]]));
+  }
+
+  private mergeProperties(newProps: Properties, oldProps: Properties): Properties {
+    return {
+      query: [oldProps.query, newProps.query].reduce((acc, current) => {
+        for (const key in current) {
+          if (key in acc) {
+            acc[key] = acc[key].concat(current[key]);
+          } else {
+            acc[key] = current[key];
+          }
+        }
+        return acc;
+      }, {})
+    };
   }
 }
