@@ -87,6 +87,7 @@ export default class FunimationClient {
    * @param token An optional Funimation access token, which provides greater detail.
    */
   public async GetShowDetailAsync(id: number, token?: string): Promise<ShowDetails> {
+    console.log('getting show with id', id);
     const query = stringify({
       territory: this.options.territory,
       pk: id,
@@ -118,6 +119,7 @@ export default class FunimationClient {
       },
       episodes: episodes.map(episode => {
         return {
+          id: Number.parseInt(episode.getElementsByTagName('id')[0].firstChild!.nodeValue!),
           title: episode.getElementsByTagName('title')[0].firstChild!.nodeValue!,
           subtitle: episode.getElementsByTagName('subtitle')[0].firstChild!.nodeValue!
         };
