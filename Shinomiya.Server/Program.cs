@@ -8,7 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Shinomiya.UI.Electron.Server
+namespace Shinomiya.Server
 {
     public class Program
     {

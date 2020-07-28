@@ -1,5 +1,5 @@
 {
-  "executable": "Shinomiya.UI.Electron",
+  "executable": "Shinomiya.Server",
   "splashscreen": {
     "imageFile": ""
   },

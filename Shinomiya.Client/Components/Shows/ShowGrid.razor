@@ -1,0 +1,11 @@
+﻿<div>
+    @foreach (var show in Shows)
+    {
+        <ShowGrid />
+    }
+</div>
+
+@code {
+    [Parameter]
+    public IEnumerable<Show> Shows { get; set; }
+}

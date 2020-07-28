@@ -1,0 +1,6 @@
+﻿<img src="@(Show.TitleImages.ApplePosterCover ?? Show.TitleImages.ShowThumbnail)" alt="@Show.Title" />
+
+@code {
+    [Parameter]
+    public Show Show { get; set; }
+}

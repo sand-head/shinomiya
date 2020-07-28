@@ -1,0 +1,43 @@
+@page "/fetchdata"
+@using Shinomiya.Models
+@inject HttpClient Http
+
+<h1>Funimation Shows</h1>
+
+@if (shows == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Ratings</th>
+                <th>Synopsis</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var show in shows)
+            {
+                <tr>
+                    <td>@show.Title</td>
+                    <td>@show.StarRating / 5</td>
+                    <td>@show.Synopsis.ShortSynopsis</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Show> shows;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await Http.GetFromJsonAsync<FunimationResult<Show, ShowFacets>>("Funimation/shows");
+        shows = result.Items;
+    }
+
+}

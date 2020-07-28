@@ -8,7 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace Shinomiya.Electron.Client
+namespace Shinomiya.Client
 {
     public class Program
     {

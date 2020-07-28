@@ -1,12 +1,14 @@
+using ElectronNET.API;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Linq;
 using System.Threading.Tasks;
-using ElectronApp = ElectronNET.API.Electron;
 
-namespace Shinomiya.UI.Electron
+namespace Shinomiya.Server
 {
     public class Startup
     {
@@ -21,7 +23,7 @@ namespace Shinomiya.UI.Electron
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddHttpClient<FunimationService>();
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
@@ -51,7 +53,15 @@ namespace Shinomiya.UI.Electron
                 endpoints.MapFallbackToFile("index.html");
             });
 
-            Task.Run(async () => await ElectronApp.WindowManager.CreateWindowAsync());
+            if (HybridSupport.IsElectronActive)
+            {
+                StartElectron();
+            }
+        }
+
+        public async void StartElectron()
+        {
+            await Electron.WindowManager.CreateWindowAsync();
         }
     }
 }

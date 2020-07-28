@@ -7,7 +7,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="3.2.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Shinomiya.Electron.Client\Shinomiya.Electron.Client.csproj" />
+    <ProjectReference Include="..\Shinomiya.Client\Shinomiya.Client.csproj" />
     <ProjectReference Include="..\Shinomiya\Shinomiya.csproj" />
   </ItemGroup>
   <ItemGroup>
