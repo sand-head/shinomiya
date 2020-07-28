@@ -10,6 +10,12 @@
 }
 else
 {
+    @foreach (var genre in facets.Genres)
+    {
+        <div>
+            @genre.Name - @genre.Count
+        </div>
+    }
     <table class="table">
         <thead>
             <tr>
@@ -32,11 +38,13 @@ else
 }
 
 @code {
+    private ShowFacets facets;
     private List<Show> shows;
 
     protected override async Task OnInitializedAsync()
     {
         var result = await Http.GetFromJsonAsync<FunimationResult<Show, ShowFacets>>("Funimation/shows");
+        facets = result.Facets;
         shows = result.Items;
     }
 

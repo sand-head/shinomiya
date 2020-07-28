@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace Shinomiya.Models
 {
@@ -9,10 +6,10 @@ namespace Shinomiya.Models
     {
         public int ItemId { get; set; }
         public string Title { get; set; }
+        public ShowSynopsis Synopsis { get; set; }
         public string[] Genres { get; set; }
         public ShowTitleImages TitleImages { get; set; }
         public double StarRating { get; set; }
-        public ShowSynopsis Synopsis { get; set; }
     }
 
     public class ShowTitleImages
@@ -33,5 +30,13 @@ namespace Shinomiya.Models
         public string LongSynopsis { get; set; }
         [JsonPropertyName("full-synopsis")]
         public string FullSynopsis { get; set; }
+    }
+
+    public class ShowFacets
+    {
+        public ItemFacet[] TxDate { get; set; }
+        public ItemFacet[] Genres { get; set; }
+        public ItemFacet[] Audio { get; set; }
+        public ItemFacet[] Type { get; set; }
     }
 }

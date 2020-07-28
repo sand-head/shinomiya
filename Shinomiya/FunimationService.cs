@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Shinomiya
@@ -30,6 +29,20 @@ namespace Shinomiya
             var response = await _client.GetAsync(url);
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadFromJsonAsync<FunimationResult<Show, ShowFacets>>();
+        }
+
+        public async Task<FunimationResult<Episode, EpisodeFacets>> GetEpisodesAsync(int titleId, int limit = 25, int offset = 0)
+        {
+            var url = QueryHelpers.AddQueryString("funimation/episodes", new Dictionary<string, string>
+            {
+                ["title_id"] = titleId.ToString(),
+                ["limit"] = limit.ToString(),
+                ["offset"] = offset.ToString()
+            });
+
+            var response = await _client.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadFromJsonAsync<FunimationResult<Episode, EpisodeFacets>>();
         }
     }
 }
