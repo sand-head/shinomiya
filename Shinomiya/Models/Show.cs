@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Collections.ObjectModel;
+using System.Text.Json.Serialization;
 
 namespace Shinomiya.Models
 {
@@ -18,6 +19,9 @@ namespace Shinomiya.Models
         public string ApplePosterCover { get; set; }
         public string ShowLogo { get; set; }
         // todo: add the rest, maybe
+
+        public string ShowThumbnailLowRes =>
+            ShowThumbnail.Replace("image/upload/", "image/upload/c_fill,q_60,w_280,h_280/");
     }
 
     public class ShowSynopsis

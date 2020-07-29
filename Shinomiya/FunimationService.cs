@@ -33,7 +33,7 @@ namespace Shinomiya
 
         public async Task<FunimationResult<Episode, EpisodeFacets>> GetEpisodesAsync(int titleId, int limit = 25, int offset = 0)
         {
-            var url = QueryHelpers.AddQueryString("funimation/episodes", new Dictionary<string, string>
+            var url = QueryHelpers.AddQueryString("funimation/episodes/", new Dictionary<string, string>
             {
                 ["title_id"] = titleId.ToString(),
                 ["limit"] = limit.ToString(),

@@ -1,7 +1,33 @@
 ﻿@page "/"
+@using Shinomiya.Models
+@inject HttpClient Http
 
-<h1>Hello, world!</h1>
+<h1>Funimation Shows</h1>
 
-Welcome to your new app.
+@if (shows == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    @foreach (var genre in facets.Genres)
+    {
+        <div>
+            @genre.Name - @genre.Count
+        </div>
+    }
+    <ShowGrid Shows=@shows />
+}
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+@code {
+    private ShowFacets facets;
+    private List<Show> shows;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await Http.GetFromJsonAsync<FunimationResult<Show, ShowFacets>>("Funimation/shows");
+        facets = result.Facets;
+        shows = result.Items;
+    }
+
+}

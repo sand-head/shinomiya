@@ -1,4 +1,9 @@
-﻿<img src="@(Show.TitleImages.ApplePosterCover ?? Show.TitleImages.ShowThumbnail)" alt="@Show.Title" />
+﻿<div class="show" style="background-image: url('@Show.TitleImages.ShowThumbnailLowRes')">
+    <div class="show-content">
+        <StarRating Rating=@Show.StarRating />
+        <div class="title">@Show.Title</div>
+    </div>
+</div>
 
 @code {
     [Parameter]

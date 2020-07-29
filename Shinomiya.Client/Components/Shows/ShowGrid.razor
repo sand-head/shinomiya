@@ -1,9 +1,9 @@
-﻿<div>
+﻿<section class="show-grid">
     @foreach (var show in Shows)
     {
-        <ShowGrid />
+        <ShowItem Show=@show />
     }
-</div>
+</section>
 
 @code {
     [Parameter]
