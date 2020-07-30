@@ -1,6 +1,6 @@
 ﻿@page "/"
 @using Shinomiya.Models
-@inject HttpClient Http
+@inject FunimationService funimation
 
 <h1>Funimation Shows</h1>
 
@@ -25,7 +25,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        var result = await Http.GetFromJsonAsync<FunimationResult<Show, ShowFacets>>("Funimation/shows");
+        var result = await funimation.GetShowsAsync();
         facets = result.Facets;
         shows = result.Items;
     }

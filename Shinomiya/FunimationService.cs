@@ -14,7 +14,7 @@ namespace Shinomiya
 
         public FunimationService(HttpClient client)
         {
-            client.BaseAddress = new Uri("https://prod-api-funimationnow.dadcdigital.com/api/");
+            if (client.BaseAddress == null) throw new ArgumentException("HttpClient must have a BaseAddress set.", nameof(client));
             _client = client;
         }
 
