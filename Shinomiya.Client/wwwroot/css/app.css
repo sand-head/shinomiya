@@ -20,6 +20,10 @@ body {
     font-family: Helvetica, sans-serif;
 }
 
+a {
+    text-decoration: none;
+}
+
 #blazor-error-ui {
     background: lightyellow;
     bottom: 0;
@@ -63,7 +67,6 @@ app {
         .sidebar ul .sidebar-link {
             color: var(--text-color);
             display: block;
-            text-decoration: none;
             padding: 8px 12px;
         }
 

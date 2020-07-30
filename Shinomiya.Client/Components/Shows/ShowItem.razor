@@ -1,6 +1,6 @@
 ﻿@using Shinomiya.Helpers
 
-<div class="show" style="background-image: url('@Show.TitleImages.ShowThumbnailLowRes')">
+<a href="/ShowDetails/@Show.ItemId" class="show" style="background-image: url('@Show.TitleImages.ShowThumbnailLowRes')">
     <div class="show-content">
         <StarRating Rating=@Show.StarRating />
         <div class="title">
@@ -10,7 +10,7 @@
             }
         </div>
     </div>
-</div>
+</a>
 
 @code {
     [Parameter]
