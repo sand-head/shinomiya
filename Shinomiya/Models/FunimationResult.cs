@@ -2,6 +2,16 @@
 
 namespace Shinomiya.Models
 {
+    public class FunimationResult<TItem>
+    {
+        public List<TItem> Items { get; set; }
+
+        public int Count { get; set; }
+        // for some reason, limit seems to be missing in this result
+        public int Offset { get; set; }
+        public int Total { get; set; }
+    }
+
     public class FunimationResult<TItem, TFacet>
     {
         public TFacet Facets { get; set; }

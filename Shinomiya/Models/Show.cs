@@ -11,6 +11,10 @@ namespace Shinomiya.Models
         public string[] Genres { get; set; }
         public ShowTitleImages TitleImages { get; set; }
         public double StarRating { get; set; }
+
+        // gonna put this here so I don't forget:
+        // "avod" refers to VODs with "Basic" level access
+        // "svod" refers to VODs with "Premium" level access
     }
 
     public class ShowTitleImages
@@ -20,8 +24,8 @@ namespace Shinomiya.Models
         public string ShowLogo { get; set; }
         // todo: add the rest, maybe
 
-        public string ShowThumbnailLowRes =>
-            ShowThumbnail.Replace("image/upload/", "image/upload/c_fill,q_60,w_280,h_280/");
+        public string GetAdjustedShowThumbnail(string crop = "fill", int quality = 60, int width = 280, int height = 280) =>
+            ShowThumbnail.Replace("image/upload/", $"image/upload/c_{crop},q_{quality},w_{width},h_{height}/");
     }
 
     public class ShowSynopsis
