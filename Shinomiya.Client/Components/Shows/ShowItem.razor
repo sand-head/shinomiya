@@ -1,6 +1,6 @@
 ﻿@using Shinomiya.Helpers
 
-<a href="/ShowDetails/@Show.ItemId" class="show" style="background-image: url('@Show.TitleImages.ShowThumbnailLowRes')">
+<a href="/ShowDetails/@Show.ItemId" class="show" style="background-image: url('@Show.TitleImages.GetAdjustedShowThumbnail(quality: 100, width: 240, height: 240)')">
     <div class="show-content">
         <StarRating Rating=@Show.StarRating />
         <div class="title">

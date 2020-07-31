@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Shinomiya.Json;
+using System;
 using System.Text.Json.Serialization;
 
 namespace Shinomiya.Models
@@ -21,14 +22,12 @@ namespace Shinomiya.Models
         [JsonPropertyName("last_name")]
         public string LastName { get; set; }
         public string Email { get; set; }
-        [JsonPropertyName("last_login_local")]
-        public DateTime LastLoginLocal { get; set; }
         public string DisplayName { get; set; }
         public string Avatar { get; set; }
         public string DefaultLanguage { get; set; }
         [JsonPropertyName("last_login")]
         public DateTime LastLogin { get; set; }
-        [JsonPropertyName("date_joined")]
+        [JsonPropertyName("date_joined"), JsonConverter(typeof(DateJoinedDateTimeConverter))]
         public DateTime DateJoined { get; set; }
     }
 }

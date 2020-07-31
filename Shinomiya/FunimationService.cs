@@ -9,7 +9,16 @@ using System.Threading.Tasks;
 
 namespace Shinomiya
 {
-    public class FunimationService
+    public interface IFunimationService
+    {
+        Task<LogInResult> LogInAsync(string email, string password);
+        Task LogOutAsync();
+        Task<FunimationResult<Show, ShowFacets>> GetShowsAsync(int limit, int offset);
+        Task<FunimationResult<Episode, EpisodeFacets>> GetEpisodesAsync(int titleId, int limit, int offset);
+        Task<FunimationResult<QueuedShow>> GetQueueAsync(int limit, int offset);
+    }
+
+    public class FunimationService : IFunimationService
     {
         private readonly HttpClient _client;
 
@@ -41,7 +50,16 @@ namespace Shinomiya
         }
 
         /// <summary>
-        /// Queries the API for a list of shows.
+        /// Asynchronously logs out the currently logged in user.
+        /// </summary>
+        public async Task LogOutAsync()
+        {
+            var response = await _client.PostAsync("auth/logout/", null);
+            response.EnsureSuccessStatusCode();
+        }
+
+        /// <summary>
+        /// Asynchronously queries the API for a list of shows.
         /// </summary>
         /// <param name="limit">The number of shows to take, defaulting to 25.</param>
         /// <param name="offset">The number to offset the list by, defaulting to 0.</param>
@@ -59,7 +77,7 @@ namespace Shinomiya
         }
 
         /// <summary>
-        /// Queries the API for a section of a given show's episode list.
+        /// Asynchronously ueries the API for a section of a given show's episode list.
         /// </summary>
         /// <param name="titleId">The internal ID of the show.</param>
         /// <param name="limit">The number of episodes to take, defaulting to 25.</param>
@@ -79,7 +97,8 @@ namespace Shinomiya
         }
 
         /// <summary>
-        /// Queries the API for a section of a user's queue. Requires authentication via <see cref="LogInAsync(string, string)"/>.
+        /// Asynchronously queries the API for a section of a user's queue.
+        /// Requires authentication via <see cref="LogInAsync(string, string)"/>.
         /// </summary>
         /// <param name="limit">The number of queued shows to take, defaulting to 25.</param>
         /// <param name="offset">The number to offset the list by, defaulting to 0.</param>
