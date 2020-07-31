@@ -1,5 +1,5 @@
 # Shinomiya
-An open source Funimation app for iOS and Android, build using Expo and React Native.
+An open source Funimation client for Windows, Mac OS, and Linux, built using Blazor WebAssembly and Electron.
 
 ## Why?
 At the beginning of the Spring 2020 anime season, I came to the realization that in order to watch most of the good shows *legally*, I'd have to chalk up money for a service that has nasty apps with bad app feel.
