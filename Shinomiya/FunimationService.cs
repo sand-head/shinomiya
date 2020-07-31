@@ -77,7 +77,7 @@ namespace Shinomiya
         }
 
         /// <summary>
-        /// Asynchronously ueries the API for a section of a given show's episode list.
+        /// Asynchronously queries the API for a section of a given show's episode list.
         /// </summary>
         /// <param name="titleId">The internal ID of the show.</param>
         /// <param name="limit">The number of episodes to take, defaulting to 25.</param>
