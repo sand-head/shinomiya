@@ -1,10 +1,8 @@
 using Grpc.Net.Client;
 using Grpc.Net.Client.Web;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using Shinomiya.Protobuf.Funimation;
-using System;
+using Shinomiya.Protos.Funimation;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -19,8 +17,10 @@ namespace Shinomiya.Client
 
             builder.Services.AddSingleton(services =>
             {
-                var httpClient = new HttpClient(new GrpcWebHandler(GrpcWebMode.GrpcWeb, new HttpClientHandler()));
-                var channel = GrpcChannel.ForAddress(builder.HostEnvironment.BaseAddress, new GrpcChannelOptions { HttpClient = httpClient });
+                var channel = GrpcChannel.ForAddress(builder.HostEnvironment.BaseAddress, new GrpcChannelOptions
+                {
+                    HttpHandler = new GrpcWebHandler(new HttpClientHandler())
+                });
                 return new Funimation.FunimationClient(channel);
             });
 

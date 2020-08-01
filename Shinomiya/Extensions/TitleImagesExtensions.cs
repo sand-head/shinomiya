@@ -1,4 +1,4 @@
-﻿using static Shinomiya.Protobuf.Funimation.Show.Types;
+﻿using static Shinomiya.Protos.Funimation.Show.Types;
 
 namespace Shinomiya.Extensions
 {

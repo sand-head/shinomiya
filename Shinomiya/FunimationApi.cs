@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
+using Shinomiya.Json;
 using Shinomiya.Models;
+using Shinomiya.Protos.Funimation;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Shinomiya
@@ -13,19 +16,26 @@ namespace Shinomiya
     {
         Task<LogInResult> LogInAsync(string email, string password);
         Task LogOutAsync();
-        Task<FunimationResult<Show, ShowFacets>> GetShowsAsync(int limit = 25, int offset = 0);
-        Task<FunimationResult<Episode, EpisodeFacets>> GetEpisodesAsync(int titleId, int limit = 25, int offset = 0);
+        Task<FunimationResult<Show>> GetShowsAsync(int limit = 25, int offset = 0);
+        Task<FunimationResult<Episode>> GetEpisodesAsync(int titleId, int limit = 25, int offset = 0);
         Task<FunimationResult<QueuedShow>> GetQueueAsync(int limit = 25, int offset = 0);
     }
 
     public class FunimationApi : IFunimationApi
     {
         private readonly HttpClient _client;
+        private readonly JsonSerializerOptions _jsonOptions;
 
         public FunimationApi(HttpClient client)
         {
             if (client.BaseAddress == null) throw new ArgumentException("HttpClient must have a BaseAddress set.", nameof(client));
             _client = client;
+            _jsonOptions = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
+            _jsonOptions.Converters.Add(new FacetConverter());
+            _jsonOptions.Converters.Add(new RepeatedFieldTConverter());
         }
 
         /// <summary>
@@ -63,7 +73,7 @@ namespace Shinomiya
         /// </summary>
         /// <param name="limit">The number of shows to take, defaulting to 25.</param>
         /// <param name="offset">The number to offset the list by, defaulting to 0.</param>
-        public async Task<FunimationResult<Show, ShowFacets>> GetShowsAsync(int limit = 25, int offset = 0)
+        public async Task<FunimationResult<Show>> GetShowsAsync(int limit = 25, int offset = 0)
         {
             var url = QueryHelpers.AddQueryString("funimation/shows/", new Dictionary<string, string>
             {
@@ -73,7 +83,7 @@ namespace Shinomiya
 
             var response = await _client.GetAsync(url);
             response.EnsureSuccessStatusCode();
-            return await response.Content.ReadFromJsonAsync<FunimationResult<Show, ShowFacets>>();
+            return await response.Content.ReadFromJsonAsync<FunimationResult<Show>>(_jsonOptions);
         }
 
         /// <summary>
@@ -82,7 +92,7 @@ namespace Shinomiya
         /// <param name="titleId">The internal ID of the show.</param>
         /// <param name="limit">The number of episodes to take, defaulting to 25.</param>
         /// <param name="offset">The number to offset the list by, defaulting to 0.</param>
-        public async Task<FunimationResult<Episode, EpisodeFacets>> GetEpisodesAsync(int titleId, int limit = 25, int offset = 0)
+        public async Task<FunimationResult<Episode>> GetEpisodesAsync(int titleId, int limit = 25, int offset = 0)
         {
             var url = QueryHelpers.AddQueryString("funimation/episodes/", new Dictionary<string, string>
             {
@@ -93,7 +103,7 @@ namespace Shinomiya
 
             var response = await _client.GetAsync(url);
             response.EnsureSuccessStatusCode();
-            return await response.Content.ReadFromJsonAsync<FunimationResult<Episode, EpisodeFacets>>();
+            return await response.Content.ReadFromJsonAsync<FunimationResult<Episode>>();
         }
 
         /// <summary>

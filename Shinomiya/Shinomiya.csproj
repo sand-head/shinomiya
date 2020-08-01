@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="Protobuf\funimation.proto" />
+    <Protobuf Include="Protos\funimation.proto" />
   </ItemGroup>
 
 </Project>
