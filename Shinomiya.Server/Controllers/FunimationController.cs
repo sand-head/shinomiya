@@ -6,9 +6,9 @@ namespace Shinomiya.Server.Controllers
     [ApiController, Route("[controller]")]
     public class FunimationController : ControllerBase
     {
-        private readonly FunimationService _funimation;
+        private readonly IFunimationService _funimation;
 
-        public FunimationController(FunimationService funimation)
+        public FunimationController(IFunimationService funimation)
         {
             _funimation = funimation;
         }

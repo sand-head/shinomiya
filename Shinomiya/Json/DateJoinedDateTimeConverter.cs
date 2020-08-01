@@ -14,8 +14,10 @@ namespace Shinomiya.Json
 
         public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
         {
-            var formatInfo = new DateTimeFormatInfo();
-            formatInfo.DateSeparator = "-";
+            var formatInfo = new DateTimeFormatInfo
+            {
+                DateSeparator = "-"
+            };
 
             writer.WriteStringValue(value.ToString("G", formatInfo));
         }

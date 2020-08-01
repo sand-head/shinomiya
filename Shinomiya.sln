@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shinomiya.Client", "Shinomi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shinomiya.Server", "Shinomiya.Server\Shinomiya.Server.csproj", "{C1032197-DF5D-40E6-9524-73B6C15C6C4C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shinomiya.Tests", "Shinomiya.Tests\Shinomiya.Tests.csproj", "{B3F26599-8E1A-4BB3-BDD7-C28F59FF54A5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shinomiya.Tests", "Shinomiya.Tests\Shinomiya.Tests.csproj", "{B3F26599-8E1A-4BB3-BDD7-C28F59FF54A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shinomiya.Client.Tests", "Shinomiya.Client.Tests\Shinomiya.Client.Tests.csproj", "{A5ACDD18-D318-4DC3-9C84-D6D2EA137BE9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{B3F26599-8E1A-4BB3-BDD7-C28F59FF54A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B3F26599-8E1A-4BB3-BDD7-C28F59FF54A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B3F26599-8E1A-4BB3-BDD7-C28F59FF54A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5ACDD18-D318-4DC3-9C84-D6D2EA137BE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5ACDD18-D318-4DC3-9C84-D6D2EA137BE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5ACDD18-D318-4DC3-9C84-D6D2EA137BE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5ACDD18-D318-4DC3-9C84-D6D2EA137BE9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

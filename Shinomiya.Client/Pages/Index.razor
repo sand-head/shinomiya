@@ -1,8 +1,6 @@
 ﻿@page "/"
 @using Shinomiya.Models
-@inject FunimationService funimation
-
-<h1>Funimation Shows</h1>
+@inject IFunimationService funimation
 
 @if (shows == null)
 {
@@ -10,23 +8,16 @@
 }
 else
 {
-    @foreach (var genre in facets.Genres)
-    {
-        <div>
-            @genre.Name - @genre.Count
-        </div>
-    }
+    // todo: maybe add filters and sorting (if I can figure out how to sort)
     <ShowGrid Shows=@shows />
 }
 
 @code {
-    private ShowFacets facets;
     private List<Show> shows;
 
     protected override async Task OnInitializedAsync()
     {
         var result = await funimation.GetShowsAsync();
-        facets = result.Facets;
         shows = result.Items;
     }
 

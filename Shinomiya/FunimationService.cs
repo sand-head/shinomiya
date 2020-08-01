@@ -13,9 +13,9 @@ namespace Shinomiya
     {
         Task<LogInResult> LogInAsync(string email, string password);
         Task LogOutAsync();
-        Task<FunimationResult<Show, ShowFacets>> GetShowsAsync(int limit, int offset);
-        Task<FunimationResult<Episode, EpisodeFacets>> GetEpisodesAsync(int titleId, int limit, int offset);
-        Task<FunimationResult<QueuedShow>> GetQueueAsync(int limit, int offset);
+        Task<FunimationResult<Show, ShowFacets>> GetShowsAsync(int limit = 25, int offset = 0);
+        Task<FunimationResult<Episode, EpisodeFacets>> GetEpisodesAsync(int titleId, int limit = 25, int offset = 0);
+        Task<FunimationResult<QueuedShow>> GetQueueAsync(int limit = 25, int offset = 0);
     }
 
     public class FunimationService : IFunimationService
