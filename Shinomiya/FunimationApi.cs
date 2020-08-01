@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Shinomiya
 {
-    public interface IFunimationService
+    public interface IFunimationApi
     {
         Task<LogInResult> LogInAsync(string email, string password);
         Task LogOutAsync();
@@ -18,11 +18,11 @@ namespace Shinomiya
         Task<FunimationResult<QueuedShow>> GetQueueAsync(int limit = 25, int offset = 0);
     }
 
-    public class FunimationService : IFunimationService
+    public class FunimationApi : IFunimationApi
     {
         private readonly HttpClient _client;
 
-        public FunimationService(HttpClient client)
+        public FunimationApi(HttpClient client)
         {
             if (client.BaseAddress == null) throw new ArgumentException("HttpClient must have a BaseAddress set.", nameof(client));
             _client = client;

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Shinomiya.Server.Services;
 using System;
 
 namespace Shinomiya.Server
@@ -21,9 +22,9 @@ namespace Shinomiya.Server
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddHttpClient<IFunimationService, FunimationService>(client => client.BaseAddress = new Uri("https://prod-api-funimationnow.dadcdigital.com/api/"));
-            services.AddControllersWithViews();
+            services.AddHttpClient<IFunimationApi, FunimationApi>(client => client.BaseAddress = new Uri("https://prod-api-funimationnow.dadcdigital.com/api/"));
             services.AddRazorPages();
+            services.AddGrpc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,11 +44,12 @@ namespace Shinomiya.Server
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseGrpcWeb();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
-                endpoints.MapControllers();
+                endpoints.MapGrpcService<FunimationService>().EnableGrpcWeb();
                 endpoints.MapFallbackToFile("index.html");
             });
 
