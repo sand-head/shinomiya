@@ -1,15 +1,15 @@
-﻿using System;
+﻿using Shinomiya.Models;
+using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using static Shinomiya.Protos.Funimation.Response.Types;
 
 namespace Shinomiya.Json
 {
-    internal class FacetConverter : JsonConverter<Facet>
+    internal class ItemFacetConverter : JsonConverter<ItemFacet>
     {
-        public override Facet Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override ItemFacet Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            // Facets come in the form ["name", count]
+            // ItemFacets come in the form ["name", count]
 
             if (reader.TokenType != JsonTokenType.StartArray)
                 throw new JsonException();
@@ -24,14 +24,14 @@ namespace Shinomiya.Json
             if (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
                 throw new JsonException();
 
-            return new Facet
+            return new ItemFacet
             {
                 Name = name,
                 Count = count
             };
         }
 
-        public override void Write(Utf8JsonWriter writer, Facet value, JsonSerializerOptions options)
+        public override void Write(Utf8JsonWriter writer, ItemFacet value, JsonSerializerOptions options)
         {
             writer.WriteStartArray();
             writer.WriteStringValue(value.Name);

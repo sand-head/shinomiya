@@ -1,14 +1,15 @@
 ﻿using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
-using Shinomiya.Protos.Funimation;
+using Shinomiya.Protobuf.Funimation;
 using System.Linq;
 using System.Threading.Tasks;
+using static Shinomiya.Protobuf.Funimation.Show.Types;
 
 namespace Shinomiya.Server.Services
 {
     public class FunimationService : Funimation.FunimationBase
     {
-        private readonly IFunimationApi _api;
+        private readonly IFunimationApi _api; 
 
         public FunimationService(IFunimationApi api)
         {
@@ -26,8 +27,30 @@ namespace Shinomiya.Server.Services
                 Offset = apiResponse.Offset,
                 Total = apiResponse.Total,
             };
-            grpcResponse.Facets.Add(apiResponse.ToFacetList());
-            grpcResponse.Items.AddRange(apiResponse.Items.Select(s => Any.Pack(s)));
+            grpcResponse.Facets.Add(apiResponse.Facets.ToGrpcFacets());
+            grpcResponse.Items.AddRange(apiResponse.Items.Select(s =>
+            {
+                var showMsg = new Show
+                {
+                    ItemId = s.ItemId,
+                    Title = s.Title,
+                    StarRating = s.StarRating,
+                    Synopsis = new Synopsis
+                    {
+                        ShortSynopsis = s.Synopsis.ShortSynopsis ?? string.Empty,
+                        MediumSynopsis = s.Synopsis.MediumSynopsis ?? string.Empty,
+                        LongSynopsis = s.Synopsis.LongSynopsis ?? string.Empty,
+                        FullSynopsis = s.Synopsis.FullSynopsis ?? string.Empty
+                    },
+                    TitleImages = new TitleImages
+                    {
+                        ShowLogo = s.TitleImages.ShowLogo ?? string.Empty,
+                        ShowThumbnail = s.TitleImages.ShowThumbnail
+                    }
+                };
+                showMsg.Genres.AddRange(s.Genres);
+                return Any.Pack(showMsg);
+            }));
 
             return grpcResponse;
         }

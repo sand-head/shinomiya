@@ -1,6 +1,6 @@
 ﻿using Google.Protobuf.WellKnownTypes;
-using Shinomiya.Protos.Funimation;
-using static Shinomiya.Protos.Funimation.Show.Types;
+using Shinomiya.Protobuf.Funimation;
+using static Shinomiya.Protobuf.Funimation.Show.Types;
 
 namespace Shinomiya.Client.Tests
 {
