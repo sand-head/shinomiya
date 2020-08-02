@@ -21,9 +21,9 @@
     @code {
         void RegisterServices(SnapshotTest test)
         {
-            var mockFunimation = new Mock<IFunimationService>();
+            var mockFunimation = new Mock<IFunimationApi>();
             mockFunimation.Setup(funi => funi.GetShowsAsync(It.IsAny<int>(), It.IsAny<int>()))
-                .Returns(Task.FromResult(new FunimationResult<Show, ShowFacets>
+                .Returns(Task.FromResult(new FunimationResult<Show>
                 {
                     Count = 1,
                     Offset = 0,

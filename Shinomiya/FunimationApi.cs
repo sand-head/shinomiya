@@ -9,20 +9,20 @@ using System.Threading.Tasks;
 
 namespace Shinomiya
 {
-    public interface IFunimationService
+    public interface IFunimationApi
     {
         Task<LogInResult> LogInAsync(string email, string password);
         Task LogOutAsync();
-        Task<FunimationResult<Show, ShowFacets>> GetShowsAsync(int limit = 25, int offset = 0);
-        Task<FunimationResult<Episode, EpisodeFacets>> GetEpisodesAsync(int titleId, int limit = 25, int offset = 0);
+        Task<FunimationResult<Show>> GetShowsAsync(int limit = 25, int offset = 0);
+        Task<FunimationResult<Episode>> GetEpisodesAsync(int titleId, int limit = 25, int offset = 0);
         Task<FunimationResult<QueuedShow>> GetQueueAsync(int limit = 25, int offset = 0);
     }
 
-    public class FunimationService : IFunimationService
+    public class FunimationApi : IFunimationApi
     {
         private readonly HttpClient _client;
 
-        public FunimationService(HttpClient client)
+        public FunimationApi(HttpClient client)
         {
             if (client.BaseAddress == null) throw new ArgumentException("HttpClient must have a BaseAddress set.", nameof(client));
             _client = client;
@@ -63,7 +63,7 @@ namespace Shinomiya
         /// </summary>
         /// <param name="limit">The number of shows to take, defaulting to 25.</param>
         /// <param name="offset">The number to offset the list by, defaulting to 0.</param>
-        public async Task<FunimationResult<Show, ShowFacets>> GetShowsAsync(int limit = 25, int offset = 0)
+        public async Task<FunimationResult<Show>> GetShowsAsync(int limit = 25, int offset = 0)
         {
             var url = QueryHelpers.AddQueryString("funimation/shows/", new Dictionary<string, string>
             {
@@ -73,7 +73,7 @@ namespace Shinomiya
 
             var response = await _client.GetAsync(url);
             response.EnsureSuccessStatusCode();
-            return await response.Content.ReadFromJsonAsync<FunimationResult<Show, ShowFacets>>();
+            return await response.Content.ReadFromJsonAsync<FunimationResult<Show>>();
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace Shinomiya
         /// <param name="titleId">The internal ID of the show.</param>
         /// <param name="limit">The number of episodes to take, defaulting to 25.</param>
         /// <param name="offset">The number to offset the list by, defaulting to 0.</param>
-        public async Task<FunimationResult<Episode, EpisodeFacets>> GetEpisodesAsync(int titleId, int limit = 25, int offset = 0)
+        public async Task<FunimationResult<Episode>> GetEpisodesAsync(int titleId, int limit = 25, int offset = 0)
         {
             var url = QueryHelpers.AddQueryString("funimation/episodes/", new Dictionary<string, string>
             {
@@ -93,7 +93,7 @@ namespace Shinomiya
 
             var response = await _client.GetAsync(url);
             response.EnsureSuccessStatusCode();
-            return await response.Content.ReadFromJsonAsync<FunimationResult<Episode, EpisodeFacets>>();
+            return await response.Content.ReadFromJsonAsync<FunimationResult<Episode>>();
         }
 
         /// <summary>

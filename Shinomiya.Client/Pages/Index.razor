@@ -1,6 +1,6 @@
 ﻿@page "/"
 @using Shinomiya.Models
-@inject IFunimationService funimation
+@inject IFunimationApi funimation
 
 @if (shows == null)
 {
@@ -13,7 +13,7 @@ else
 }
 
 @code {
-    private List<Show> shows;
+    private IEnumerable<Show> shows;
 
     protected override async Task OnInitializedAsync()
     {

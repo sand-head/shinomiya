@@ -21,7 +21,7 @@ namespace Shinomiya.Server
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddHttpClient<IFunimationService, FunimationService>(client => client.BaseAddress = new Uri("https://prod-api-funimationnow.dadcdigital.com/api/"));
+            services.AddHttpClient<IFunimationApi, FunimationApi>(client => client.BaseAddress = new Uri("https://prod-api-funimationnow.dadcdigital.com/api/"));
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
