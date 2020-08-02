@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.ObjectModel;
 using System.Text.Json.Serialization;
-using static Shinomiya.Protobuf.Funimation.Response.Types;
 
 namespace Shinomiya.Models
 {
@@ -48,45 +46,5 @@ namespace Shinomiya.Models
         public ItemFacet[] Genres { get; set; }
         public ItemFacet[] Audio { get; set; }
         public ItemFacet[] Type { get; set; }
-
-        public Dictionary<string, FacetList> ToGrpcFacets()
-        {
-            // this just goes to show that I should manually parse facets to a dictionary in the JsonConverter...
-            var facets = new Dictionary<string, FacetList>();
-
-            var txDate = new FacetList();
-            txDate.Value.AddRange(TxDate.Select(t => new Facet
-            {
-                Name = t.Name,
-                Count = t.Count
-            }));
-            facets.Add("TxDate", txDate);
-
-            var genres = new FacetList();
-            genres.Value.AddRange(Genres.Select(t => new Facet
-            {
-                Name = t.Name,
-                Count = t.Count
-            }));
-            facets.Add("Genres", genres);
-
-            var audio = new FacetList();
-            audio.Value.AddRange(Audio.Select(t => new Facet
-            {
-                Name = t.Name,
-                Count = t.Count
-            }));
-            facets.Add("Audio", audio);
-
-            var type = new FacetList();
-            type.Value.AddRange(Type.Select(t => new Facet
-            {
-                Name = t.Name,
-                Count = t.Count
-            }));
-            facets.Add("Type", type);
-
-            return facets;
-        }
     }
 }

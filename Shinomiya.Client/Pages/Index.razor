@@ -1,5 +1,6 @@
 ﻿@page "/"
-@inject Funimation.FunimationClient client
+@using Shinomiya.Models
+@inject IFunimationService funimation
 
 @if (shows == null)
 {
@@ -12,16 +13,12 @@ else
 }
 
 @code {
-    private IEnumerable<Show> shows;
+    private List<Show> shows;
 
     protected override async Task OnInitializedAsync()
     {
-        var result = await client.GetShowsAsync(new GetShowsRequest
-        {
-            Limit = 25,
-            Offset = 0
-        });
-        shows = result.Items.Select(i => i.Unpack<Show>());
+        var result = await funimation.GetShowsAsync();
+        shows = result.Items;
     }
 
 }

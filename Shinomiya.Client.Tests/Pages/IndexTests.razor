@@ -1,5 +1,4 @@
 ﻿@inherits TestComponentBase
-@using System.Threading
 @using Index = Shinomiya.Client.Pages.Index
 
 <SnapshotTest Setup="RegisterServices">
@@ -22,11 +21,29 @@
     @code {
         void RegisterServices(SnapshotTest test)
         {
-            var mockClient = new Mock<Funimation.FunimationClient>();
-            var fakeCall = TestCalls.AsyncUnaryCall<Response>(Task.FromResult(TestUtils.GetFakeShows()), Task.FromResult(new Metadata()), () => Status.DefaultSuccess, () => new Metadata(), () => { });
-            mockClient.Setup(funi => funi.GetShowsAsync(It.IsAny<GetShowsRequest>(), null, null, CancellationToken.None))
-                .Returns(fakeCall);
-            test.Services.AddSingleton(mockClient.Object);
+            var mockFunimation = new Mock<IFunimationService>();
+            mockFunimation.Setup(funi => funi.GetShowsAsync(It.IsAny<int>(), It.IsAny<int>()))
+                .Returns(Task.FromResult(new FunimationResult<Show, ShowFacets>
+                {
+                    Count = 1,
+                    Offset = 0,
+                    Limit = 25,
+                    Total = 1,
+                    Items = new List<Show>
+                    {
+                    new Show
+                    {
+                        ItemId = 1,
+                        Title = "Hello World",
+                        StarRating = 7.76,
+                        TitleImages = new ShowTitleImages
+                        {
+                            ShowThumbnail = "https://cdn.myanimelist.net/images/anime/1395/102089l.jpg"
+                        }
+                    }
+                }
+                }));
+            test.Services.AddSingleton(mockFunimation.Object);
         }
     }
 </SnapshotTest>
