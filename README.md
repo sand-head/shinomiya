@@ -1,3 +1,6 @@
+> **Warning**
+> This repository has been archived, not only because I have lost interest, but also because [Funimation is being absorbed into Crunchyroll](https://www.crunchyroll.com/anime-news/2022/03/01/funimation-content-moving-to-crunchyroll-for-worlds-largest-anime-library), leaving no reason to continue work on a Funimation client.
+
 # Shinomiya
 An open source Funimation app for iOS and Android, build using Expo and React Native.
 
